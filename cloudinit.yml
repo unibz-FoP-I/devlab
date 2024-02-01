@@ -1,0 +1,40 @@
+# cloud-config
+
+### Avoid package update for reproducibility
+package_update: false
+package_upgrade: false
+# package_reboot_if_required: true
+
+packages:
+  - curl
+  - git
+
+write_files:
+  - content: |
+      #!/usr/bin/env sh
+      set -ex
+
+      fatal() {
+        echo "$@" >&2; exit 1
+      }
+
+      DEFAULT_USER=1000
+      if [ -z "$1" ]; then
+        REVISION=main
+        SETUP_SCRIPT="https://github.com/unibz-FoP-I/devlab/raw/${REVISION}/setup.sh"
+      else
+        SETUP_SCRIPT="$1"
+      fi
+
+      if id -un "${DEFAULT_USER}"; then
+        { [ -r "${SETUP_SCRIPT}" ] && cat "" "${SETUP_SCRIPT}" || curl -sSLf "${SETUP_SCRIPT}" || echo "exit 1"; } | sudo -i -u "#${DEFAULT_USER}" sh -s || fatal "Failed to run setup script <${SETUP_SCRIPT}>"
+      else
+        fatal "User ${DEFAULT_USER} not available, skipping setup"
+      fi
+    path: /run/run_setup_script.sh
+    permissions: '0755'
+    owner: root
+    defer: true
+
+runcmd:
+  - [sh, "/run/run_setup_script.sh"]
