@@ -20,7 +20,7 @@ write_files:
 
       DEFAULT_USER=1000
       if [ -z "$1" ]; then
-        REVISION=main
+        REVISION="v0.1.0gh"
         SETUP_SCRIPT="https://github.com/unibz-FoP-I/devlab/raw/${REVISION}/setup.sh"
       else
         SETUP_SCRIPT="$1"

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -ex
 
-FLAKE_URL="github:unibz-FoP-I/devlab#clab"
+FLAKE_URL="github:unibz-FoP-I/devlab?ref=v0.1.0gh#clab"
 
 setup_nix() {
     ### Install nix and required packages
